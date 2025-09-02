@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* Fonts */
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/fonts/PublicSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/fonts/PublicSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+/* Font utility classes */
+.font-public-regular { font-family: 'Public Sans', sans-serif; font-weight: 400; }
+.font-public-bold { font-family: 'Public Sans', sans-serif; font-weight: 700; }
+
+.heading-xl { 
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  color: var(--green); /* Example color */
+}
+
+.subheading-sm {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0px;
+  color: var(--grey-500);
+}
+
+.heading-lg {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  color: var(--cyan);
+}
+
+.body-xs {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: 0px;
+  color: var(--grey-900);
+}
+
+.body-sm {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0px;
+  color: var(--navyGrey);
+}
+
+
+:root {
+  /* Beige */
+  --beige-100: #F2F0EA;
+  --beige-500: #A68A69;
+
+  /* Grey */
+  --grey-100: #F2F2F2;
+  --grey-300: #B3B3B3;
+  --grey-500: #999999;
+  --grey-900: #1A1A1A;
+
+  /* Secondary */
+  --green: #27C77B;
+  --yellow: #F2C94C;
+  --cyan: #42C2CF;
+  --navy: #4C4C6D;
+  --red: #CF4739;
+  --purple: #8C62B9;
+
+  /* Other colors */
+  --magenta: #9E4E7E;
+  --blue: #2F82C2;
+  --turquoise: #327C7C;
+  --brown: #8C5A32;
+  --navyGrey: #737A8C;
+  --armyGreen: #717D62;
+  --gold: #C2AB37;
+  --orange: #BE5829;
+  --white: #FFFFFF;
+}
