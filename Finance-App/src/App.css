@@ -18,7 +18,11 @@
 
 /* Font utility classes */
 .font-public-regular { font-family: 'Public Sans', sans-serif; font-weight: 400; }
-.font-public-bold { font-family: 'Public Sans', sans-serif; font-weight: 700; }
+.font-public-bold { 
+  font-family: 'Public Sans', sans-serif; 
+  font-weight: 900; 
+  font-size:32px; 
+  letter-spacing: 1px; }
 
 .heading-xl { 
   font-family: 'Public Sans', sans-serif;

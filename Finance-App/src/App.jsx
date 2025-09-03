@@ -1,20 +1,23 @@
 import { useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import BillsPage from './pages/BillsPage.jsx'
+import BudgetPage from './pages/BudgetPage.jsx'
+import HomePage from './pages/HomePage.jsx'
+import NotFoundPage from './pages/NotFoundPage.jsx'
+import PotsPage from './pages/PotsPage.jsx'
+import TransactionPage from './pages/TransactionPage.jsx'
 
 export default function App() {
 
   return (
-<div className="p-6 bg-beige-100 text-grey-900 rounded-lg shadow">
-  <h1 className="heading-xl text-green">Budget Overview</h1>
-  <p className="subheading-sm text-grey-500">Track your monthly expenses</p>
-  <h2 className="heading-lg text-cyan">Phasellus ultrices nulla quis nibh</h2>
-  <p className="body-xs text-grey-900">
-    Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-    vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-  </p>
-  <p className="body-sm text-navyGrey">
-    Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-  </p>
-</div>
-
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/transactions" element={<TransactionPage />} />
+      <Route path="/budgets" element={<BudgetPage />} />
+      <Route path="/pots" element={<PotsPage />} />
+      <Route path="/bills" element={<BillsPage />} />\
+      {/* 404 Not Found route */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   )
 }
