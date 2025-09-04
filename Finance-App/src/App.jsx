@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { useMoneyStore } from '../stores/moneystore.js'
+import data from './data.json'
 import BillsPage from './pages/BillsPage.jsx'
 import BudgetPage from './pages/BudgetPage.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -8,6 +10,11 @@ import PotsPage from './pages/PotsPage.jsx'
 import TransactionPage from './pages/TransactionPage.jsx'
 
 export default function App() {
+  const setData = useMoneyStore((state) => state.setData);
+
+  useEffect(() => {
+    setData(data);
+  }, [setData]);
 
   return (
     <Routes>
