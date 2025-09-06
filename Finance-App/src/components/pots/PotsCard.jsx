@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toCurrencyNoDecimal } from '../../utils/toCurrency';
+import AddMoneyModal from './AddMoneyModal';
+import WithdrawModal from './WithdrawModal';
 
 const PotsCard = ({name, target, total, theme}) => {
   const goalProgress = (total / target) * 100;
+
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openWithdraw, setOpenWithdraw] = useState(false);
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md w-full">
@@ -35,10 +40,19 @@ const PotsCard = ({name, target, total, theme}) => {
       <div className="flex flex-row justify-between mt-10 gap-4">
         <button className="bg-[var(--beige-100)] rounded-xl h-15 w-1/2 font-semibold
         hover:bg-white hover:shadow-md hover:transition ease-in-out duration-300 hover:border-1 border-black
-        ">+ Add Money</button>
+        " onClick={() => setOpenAdd(true)}>+ Add Money</button>
         <button className="bg-[var(--beige-100)] rounded-xl h-15 w-1/2 font-semibold
         hover:bg-white hover:shadow-md hover:transition ease-in-out duration-300 hover:border-1 border-black
-        ">Withdraw</button>
+        " onClick={() => setOpenWithdraw(true)}
+        >Withdraw</button>
+      </div>
+
+      {/* Modals */}
+      <div>
+        <AddMoneyModal open={openAdd} name={name} total={total} goalProgress={goalProgress} theme={theme} target={target} onClose={() => setOpenAdd(false)}></AddMoneyModal>
+      </div>
+      <div>
+        <WithdrawModal open={openWithdraw} name={name} total={total} goalProgress={goalProgress} theme={theme} target={target} onClose={() => setOpenWithdraw(false)}></WithdrawModal>
       </div>
     </div>
   )

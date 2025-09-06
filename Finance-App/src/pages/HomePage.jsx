@@ -1,4 +1,4 @@
-import { useMoneyStore } from "../../stores/moneystore";
+import { useMoneyStore } from "../stores/moneystore";
 import { toCurrency } from "../utils/toCurrency";
 
 

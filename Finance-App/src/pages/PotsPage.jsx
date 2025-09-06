@@ -1,6 +1,6 @@
 import React from 'react';
-import { useMoneyStore } from '../../stores/moneystore';
 import PotsCard from '../components/pots/potsCard';
+import { useMoneyStore } from '../stores/moneystore';
 
 const PotsPage = () => {
   const pots = useMoneyStore((store) => store.pots);
