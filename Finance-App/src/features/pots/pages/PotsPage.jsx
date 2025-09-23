@@ -7,6 +7,7 @@ import PotsModals from '../components/PotsModals';
 const PotsPage = () => {
   const pots = useRootStore((state) => state.pots)
   const removePot = useRootStore((state) => state.removePot)
+  const fetchPots = useRootStore((state) => state.fetchPots)
 
   // Localized UI state (Modals & Selection)
   const [showAddModal, setShowAddModal] = useState(false);
@@ -16,6 +17,9 @@ const PotsPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [potToDelete, setPotToDelete] = useState(null)
 
+  useEffect(() => {
+    fetchPots();
+  }, [fetchPots]);
   
   const handleDeleteRequest = (pot) => {
     setPotToDelete(pot)
