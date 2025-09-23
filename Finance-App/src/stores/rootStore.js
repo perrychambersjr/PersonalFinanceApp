@@ -7,8 +7,13 @@ export const useRootStore = create((set, get) => ({
     ...createBalanceSlice(set, get),
 
     hydrate: (data) => {
-        console.log(data)
-        if (data.pots) set({ pots: data.pots })
+        if (data.pots) {
+            const potsWithIds = data.pots.map((pot, i) => ({
+                ...pot,
+                id: crypto.randomUUID()
+            }));
+            set({ pots: potsWithIds });
+        }
         if (data.balance) set({ balance: data.balance})
     }
 }))
