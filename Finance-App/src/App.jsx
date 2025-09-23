@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import data from './data.json'
+import PotsPage from '../src/features/pots/pages/PotsPage.jsx'
+//import data from './data.json'
 import BillsPage from './pages/BillsPage.jsx'
 import BudgetPage from './pages/BudgetPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
-import PotsPage from './pages/PotsPage.jsx'
 import TransactionPage from './pages/TransactionPage.jsx'
-import { useMoneyStore } from './stores/moneystore'
+import { useRootStore } from './stores/rootStore.js'
 
 export default function App() {
-  const setData = useMoneyStore((state) => state.setData);
+
+  const hydrate = useRootStore((state) => state.hydrate)
 
   useEffect(() => {
-    setData(data);
-  }, [setData]);
+    const loadData = async () => {
+      const res = await fetch('/data.json')
+      const data = await res.json()
+      hydrate(data) // ✅ this actually triggers your console.log
+    }
+    loadData()
+  }, [hydrate])
 
   return (
     <Routes>
