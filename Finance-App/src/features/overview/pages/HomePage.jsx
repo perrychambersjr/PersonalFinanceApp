@@ -1,5 +1,6 @@
-import { useRootStore } from "../stores/rootStore";
-import { toCurrency } from "../utils/toCurrency";
+import { useRootStore } from "../../../stores/rootStore";
+import { toCurrency } from "../../../utils/toCurrency";
+import PotsOverview from "../components/PotsOverview";
 
 export default function HomePage() {
     const balance = useRootStore((state) => state.balance)
@@ -22,6 +23,12 @@ export default function HomePage() {
                     <p className="text-black text-4xl font-semibold">{toCurrency(balance.expenses)}</p>
                 </div>
             </div>
+
+            {/* Put this in a grid */}
+            <div className="grid grid-cols-2 gap-6 pt-10">
+                <PotsOverview />
+            </div>
+
         </div>
     )
 }
