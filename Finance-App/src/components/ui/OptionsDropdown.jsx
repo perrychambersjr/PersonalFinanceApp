@@ -21,7 +21,7 @@ const OptionsDropdown = ({ options }) => {
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">
         <button
-            className='p-2 rounded-full text-[var(--grey-500)] hover:text-[var(--grey-900)] hover:bg-[var(--grey-100)] transition-colors duration-200 cursor-pointer'
+            className='p-2 rounded-full text-[var(--grey-500)] hover:text-[var(--grey-900)] hover:bg-[var(--grey-100)] transition-colors duration-200 cursor-pointer z-10'
             onClick={() => setIsDropdownOpen((prev) => !prev)}
         >
             <EllipsisIcon size={4} color='#B3B3B3'/>

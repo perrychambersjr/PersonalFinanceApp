@@ -26,5 +26,14 @@ export const createPotsSlice = (set, get) => ({
   updatePot: (updatedPot) => 
     set((state) => ({
       pots: state.pots.map((p) => p.id === updatedPot.id ? { ...create, ...updatedPot } : p)
-    }))
+    })),
+
+  withdrawFromPot: (id, amount) => 
+    set((state) => ({
+      pots: state.pots.map((p) => 
+        p.id === id
+        ? { ...p, total: Math.max(0, p.total - amount) }
+        : p
+      ),
+    })),
 })

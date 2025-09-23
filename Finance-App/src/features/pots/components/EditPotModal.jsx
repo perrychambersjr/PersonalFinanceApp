@@ -21,11 +21,11 @@ const EditPotModal = ({ pot, onClose, usedColors }) => {
   useEffect(() => {
     setName(pot?.name || "");
     setTarget(pot?.target || 0);
-    setSelectedColor(pot?.color || "");
+    setSelectedColor(pot?.theme || "");
   }, [pot]);
 
   const handleSave = () => {
-    updatePot({ ...pot, name, target: parseFloat(target), color: selectedColor });
+    updatePot({ ...pot, name, target: parseFloat(target), theme: selectedColor });
     reserveTheme(selectedColor);
     onClose();
   }

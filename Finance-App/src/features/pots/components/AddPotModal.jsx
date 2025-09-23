@@ -1,67 +1,136 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRootStore } from '../../../stores/rootStore';
+import { useThemeStore } from '../../../stores/themeStore';
 
-const AddPotModal = ({ userId, onClose, onPotCreated, usedColors }) => {
+const AddPotModal = ({ userId, onClose, onPotCreated }) => {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
-  const [colors, setColors] = useState('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedColorId, setSelectedColorId] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState('');
+
   const dropdownRef = useRef(null);
 
-    useEffect(() => {
-      const handleClickOutside = (e) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-          setDropdownOpen(false);
-        }
-      };
-    
-      document.addEventListener('mousedown', handleClickOutside);
-    
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
+  const themes = useThemeStore((store) => store.themes);
+  const usedThemes = useThemeStore((store) => store.usedThemes);
+  const getThemeHex = useThemeStore((store) => store.getThemeHex);
+  const reserveTheme = useThemeStore((store) => store.reserveTheme);
+  const addPot = useRootStore((store) => store.addPot);
 
-    useEffect(() => { // Prevents background scroll when modal is open
+  useEffect(() => { // Prevents background scroll when modal is open
         document.body.style.overflow = 'hidden';  
         return () => {
         document.body.style.overflow = 'auto'; 
         };
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(!name || !amount || !selectedTheme) return;
+
+    const newPot = {
+      id: crypto.randomUUID(),
+      name,
+      target: parseFloat(amount),
+      total: 0,
+      theme: selectedTheme,
+    };
+
+    addPot(newPot);
+    reserveTheme(selectedTheme);
+    onPotCreated?.(newPot);
+    onClose?.();
+  }
+
   return (
-        <div className="bg-white p-6 rounded-xl shadow-md w-full">
-        <div className="flex flex-row justify-between items-start gap-6">
-            <h1 className="text-4xl font-bold text-[var(--grey-900)]">Edit Pot</h1>
-            <button className="cursor-pointer border-black border-2 w-8 h-8 mt-2 rounded-full"
-            >X</button>
-        </div>
-        <p className="mt-4 text-[var(--grey-500)]">If your saving targets change, feel free to update your pots.</p>
+  <div className="fixed inset-0 z-50 flex items-center justify-center">
+        {/* Overlay */}
+        <div 
+          className="absolute inset-0 bg-black/50"
+          onClick={onClose}
+        />
 
-        <div className="mt-6">
-            <label for="pot_name" className="text-[var(--grey-900)] font-semibold block mb-2 text-sm ">Pot Name</label>
-            <input type="text" id="pot_name" className="pl-6 border border-[var(--grey-900)] text-gray-900 text-sm font-semibold rounded-lg block p-2.5 w-full" placeholder="New Pot Name" required />
-        </div>
+        {/* Modal content */}
+        <div className="relative bg-white p-6 rounded-xl shadow-lg w-full max-w-lg mx-auto z-10">
+          <div className="flex flex-row justify-between items-start gap-6">
+            <h1 className="text-2xl font-bold text-[var(--grey-900)]">Add Pot</h1>
+            <button
+              onClick={onClose}
+              className="cursor-pointer border-black border-2 w-8 h-8 mt-2 rounded-full flex items-center justify-center"
+            >
+              ✕
+            </button>
+          </div>
 
-        <div className="mt-6">
-            <label for="new_target" className="text-[var(--grey-900)] font-semibold block mb-2 text-sm ">Target</label>
-            <div className="relative">
-                <h1 className="absolute inset-y-5 start-0 flex items-center ps-3 pointer-events-none">$</h1>
+          <p className="mt-4 text-[var(--grey-500)]">Create a new pot and set a saving target.</p>
+
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+            {/* Pot Name */}
+            <div>
+              <label htmlFor="pot_name" className="block mb-2 text-sm font-semibold text-[var(--grey-900)]">
+                Pot Name
+              </label>
+              <input
+                id="pot_name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="pl-3 border border-[var(--grey-900)] text-gray-900 text-sm font-semibold rounded-lg block p-2.5 w-full"
+                placeholder="New Pot Name"
+                required
+              />
             </div>
-            <input type="text" id="new_target" className="pl-6 border border-[var(--grey-900)] text-gray-900 text-sm font-semibold rounded-lg block p-2.5 w-full" placeholder="" required />
-        </div>
 
-        <div className="mt-6">
-            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Theme</label>
-            <select id="countries" class="pl-6 border border-[var(--grey-900)] text-gray-900 text-sm rounded-lg block p-2.5 w-full">
-                <option selected>Choose a country</option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
-            </select>
+            {/* Target */}
+            <div>
+              <label htmlFor="new_target" className="block mb-2 text-sm font-semibold text-[var(--grey-900)]">
+                Target
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-2 flex items-center pointer-events-none">$</span>
+                <input
+                  id="new_target"
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="pl-6 border border-[var(--grey-900)] text-gray-900 text-sm font-semibold rounded-lg block p-2.5 w-full"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Theme */}
+            <div>
+              <label htmlFor="theme" className="block mb-2 text-sm font-medium text-gray-900">
+                Theme
+              </label>
+              <select
+                id="theme"
+                value={selectedTheme}
+                onChange={(e) => setSelectedTheme(e.target.value)}
+                className="pl-3 border border-[var(--grey-900)] text-gray-900 text-sm rounded-lg block p-2.5 w-full"
+                required
+              >
+                <option value="">Select a theme</option>
+                {themes.map((theme) => {
+                  const disabled = usedThemes.includes(theme);
+                  return (
+                    <option key={theme} value={theme} disabled={disabled}>
+                      {theme} {disabled ? '(used)' : ''}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full bg-gray-900 text-white font-semibold py-2 rounded-lg hover:bg-gray-500 transition"
+            >
+              Create Pot
+            </button>
+          </form>
         </div>
-    </div>
+      </div>
   )
 }
 

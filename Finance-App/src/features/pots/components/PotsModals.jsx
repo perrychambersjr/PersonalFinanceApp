@@ -1,5 +1,6 @@
 import React from 'react'
 import AddPotModal from './AddPotModal'
+import DeletePotModal from './DeletePotModal'
 import EditPotModal from './EditPotModal'
 
 const PotsModals = ({
@@ -9,7 +10,11 @@ const PotsModals = ({
     potToEdit,
     onCloseEdit,
     usedColors,
-    updatePot
+    updatePot,
+    showDeleteModal,
+    potToDelete,
+    onCloseDelete,
+    onConfirmDelete
 }) => {
   return (
     <> 
@@ -23,6 +28,14 @@ const PotsModals = ({
                 usedColors={usedColors} 
             />
         )}
+
+        {showDeleteModal && potToDelete && (
+        <DeletePotModal
+          potName={potToDelete.name}
+          onClose={onCloseDelete}
+          onConfirm={onConfirmDelete}
+        />
+      )}
     </>
   )
 }

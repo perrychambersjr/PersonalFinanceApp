@@ -6,11 +6,33 @@ import PotsModals from '../components/PotsModals';
 
 const PotsPage = () => {
   const pots = useRootStore((state) => state.pots)
+  const removePot = useRootStore((state) => state.removePot)
 
   // Localized UI state (Modals & Selection)
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [potToEdit, setPotToEdit] = useState(null);
+  
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [potToDelete, setPotToDelete] = useState(null)
+
+  
+  const handleDeleteRequest = (pot) => {
+    setPotToDelete(pot)
+    setShowDeleteModal(true)
+  }
+
+  const handleConfirmDelete = () => {
+    if (potToDelete) {
+      removePot(potToDelete.id)
+    } else {
+      return;
+    }
+
+    removePot(potToDelete.id);
+    setShowDeleteModal(false)
+    setPotToDelete(null)
+  }
 
   return (
     <div className="bg-[var(--beige-100)] h-full p-8">
@@ -22,6 +44,7 @@ const PotsPage = () => {
           setPotToEdit(pot)
           setShowEditModal(true)
         }}
+        onDelete={handleDeleteRequest}
       />
 
       <PotsModals
@@ -35,9 +58,18 @@ const PotsPage = () => {
         }}
         usedColors={pots.map((p) => p.color)}
         updatePot={(updatedPot) => useRootStore.getState().updatePot(updatedPot)}
+
+        showDeleteModal={showDeleteModal}
+        potToDelete={potToDelete}
+        onCloseDelete={() => setShowDeleteModal(false)}
+        onConfirmDelete={handleConfirmDelete}
       />
     </div>
   )
 }
 
 export default PotsPage
+
+/**
+ * TODO: Progress bars on the modals that reflect progress of the inputted amount in real time
+ */

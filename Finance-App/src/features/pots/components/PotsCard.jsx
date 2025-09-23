@@ -1,20 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import OptionsDropdown from '../../../components/ui/OptionsDropdown';
+import { useRootStore } from '../../../stores/rootStore';
 import { toCurrencyNoDecimal } from '../../../utils/toCurrency';
 import AddMoneyModal from './AddMoneyModal';
+import DeletePotModal from './DeletePotModal';
 import WithdrawModal from './WithdrawModal';
 
-const PotsCard = ({ pot, onEdit }) => {
+const PotsCard = ({ pot, onEdit, onDelete }) => {
   const goalProgress = (pot.total / pot.target) * 100;
-
-  console.log(pot)
 
   const [showAddMoneyModal, setShowAddMoneyModal] = useState(false);
   const [showWithdrawMoneyModal, setShowWithdrawMoneyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleEdit = () => onEdit(pot);
-  const handleDelete = () => setShowDeleteModal(true);
+  const handleDelete = () => {
+  if (typeof onDelete === 'function') {
+    onDelete(pot);
+  } else {
+    console.warn('PotsCard: onDelete is not a function', onDelete);
+  }
+};
 
   const handleAddClick = () => {
     setShowAddMoneyModal(true);
@@ -36,13 +42,13 @@ const PotsCard = ({ pot, onEdit }) => {
         <div className="flex flex-row space-x-2">
           <span
             className="w-3 h-3 mt-2 rounded-full"
-            style={{ backgroundColor: pot.color }}
+            style={{ backgroundColor: pot.theme }}
           ></span>
           <span className="font-semibold text-xl">{pot.name}</span>
         </div>
         <OptionsDropdown
           options={options}
-          className="cursor-pointer text-[var(--grey-500)] text-xl"
+          className="cursor-pointer text-[var(--grey-500)] text-xl z-1"
         />
       </div>
 
@@ -60,7 +66,7 @@ const PotsCard = ({ pot, onEdit }) => {
             className="h-2.5 rounded-full"
             style={{
               width: `${goalProgress}%`,
-              backgroundColor: pot.color,
+              backgroundColor: pot.theme,
             }}
           ></div>
         </div>
@@ -107,7 +113,7 @@ const PotsCard = ({ pot, onEdit }) => {
       <WithdrawModal
         open={showWithdrawMoneyModal}
         onClose={() => setShowWithdrawMoneyModal(false)}
-        potId={pot.id}       // 🔑 so withdrawFromPot will work later
+        potId={pot.id}  
         name={pot.name}
         total={pot.total}
         goalProgress={goalProgress}
