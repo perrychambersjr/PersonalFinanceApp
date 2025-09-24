@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PotsPage from '../src/features/pots/pages/PotsPage.jsx'
+import TransactionPage from '../src/features/transactions/pages/TransactionPage.jsx'
 import HomePage from './features/overview/pages/HomePage.jsx'
 import BillsPage from './pages/BillsPage.jsx'
 import BudgetPage from './pages/BudgetPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
-import TransactionPage from './pages/TransactionPage.jsx'
 import { useRootStore } from './stores/rootStore.js'
 
 export default function App() {

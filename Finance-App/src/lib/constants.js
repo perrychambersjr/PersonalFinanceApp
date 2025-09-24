@@ -73,3 +73,16 @@ export const THEME_HEX = {
   Gold: '#CAB361',
   Orange: '#BE6C49',
 };
+
+export const EXENSE_CATEGORIES = {
+  1: "Entertainment",
+  2: "Bills",
+  3: "Groceries",
+  4: "Dining Out",
+  5: "Transportation",
+  6: "Personal Care",
+  7: "Education",
+  8: "Lifestyle",
+  9: "Shopping",
+  10: "General"
+}
