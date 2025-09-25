@@ -1,33 +1,31 @@
-import React from 'react';
-import IconSearch from '../../../../assets/images/icon-search.svg';
+import React, { useMemo, useState } from 'react';
+import CategoryFilter from '../Controls/CategoryFilter';
+import SearchBar from '../Controls/SearchBar';
+import SortDropdown from '../Controls/SortDropdown';
 
-const TransactionsTable = ({ transactions }) => {
+const TransactionsTable = ({ transactions, onSearchChange, formatDate, sortDir, setSortDir, categoryFilter, setCategoryFilter }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    })
-  }
+  const totalPages = Math.ceil(transactions.length / pageSize);
+
+  // Slice transactions for current page
+  const paginatedTransactions = useMemo(() => {
+    // Skip transactions that belong to pages before current. E.g., Page 2 - (2-1) * 10 = 10. start at index 10
+    const startIndex = (currentPage - 1) * pageSize;
+    // Return transactions in range. E.g., Page 2 - slice(10, 20) -> transactions 10-19
+    return transactions.slice(startIndex, startIndex + pageSize);
+  }, [transactions, currentPage, pageSize]);
 
   return (
     <div className="relative overflow-x-auto rounded-xl bg-white">
       <div className="flex flex-row justify-between items-center">
-        <div className="p-6 bg-white">
-          <label htmlFor="table-search" className="sr-only">Search</label>
-          <div className="relative mt-1">
-            <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-              <img src={IconSearch} alt="search" />
-            </div>
-            <input type="text" id="table-search" className="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50" placeholder="Search transactions"/>
-          </div>
+        <SearchBar onSearchChange={onSearchChange} />
+        <div className="flex flex-row justify-between items-center gap-4">
+          <SortDropdown setSortDir={setSortDir} sortDir={sortDir}/>
+          <CategoryFilter setCategoryFilter={setCategoryFilter} categoryFilter={categoryFilter}/>
         </div>
-        <div className='flex flex-row justify-center items-center gap-4'>
-          <button>sort by</button>
-          <button>category</button>
-        </div>
+
       </div>
       <table className="w-full text-sm text-left text-gray-500 rounded-lg">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -48,7 +46,7 @@ const TransactionsTable = ({ transactions }) => {
         </thead>
 
         <tbody>
-          {transactions.map((tx) => (
+          {paginatedTransactions.map((tx) => (
             <tr key={tx.id} className="bg-white border-b border-gray-200">
               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{tx.name}</th>
               <td className="px-6 py-4">{tx.category}</td>
@@ -59,6 +57,43 @@ const TransactionsTable = ({ transactions }) => {
         </tbody>
       </table>
 
+      {/* Pagination controls */}
+      <div className="flex justify-between items-center p-4">
+        {/* Prev button */}
+        <button
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-3 py-1 rounded bg-white border-1 border-gray-300 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        {/* Page numbers */}
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`px-3 py-1 rounded ${
+                page === currentPage
+                  ? "bg-gray-900 text-white"
+                  : "bg-white border-1 border-gray-300 hover:bg-gray-300"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+
+        {/* Next button */}
+        <button
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 rounded bg-white border-1 border-gray-300 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   )
 }
