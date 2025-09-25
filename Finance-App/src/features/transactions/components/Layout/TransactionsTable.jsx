@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import CategoryFilter from '../Controls/CategoryFilter';
 import SearchBar from '../Controls/SearchBar';
 import SortDropdown from '../Controls/SortDropdown';
+import TransactionAmount from './TransactionAmount';
+import TransactionAvatar from './TransactionAvatar';
 
 const TransactionsTable = ({ transactions, onSearchChange, formatDate, sortDir, setSortDir, categoryFilter, setCategoryFilter }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +20,7 @@ const TransactionsTable = ({ transactions, onSearchChange, formatDate, sortDir, 
   }, [transactions, currentPage, pageSize]);
 
   return (
-    <div className="relative overflow-x-auto rounded-xl bg-white">
+    <div className="relative overflow-x-auto rounded-xl bg-white p-6 divide-y divide-gray-200">
       <div className="flex flex-row justify-between items-center">
         <SearchBar onSearchChange={onSearchChange} />
         <div className="flex flex-row justify-between items-center gap-4">
@@ -28,7 +30,7 @@ const TransactionsTable = ({ transactions, onSearchChange, formatDate, sortDir, 
 
       </div>
       <table className="w-full text-sm text-left text-gray-500 rounded-lg">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <thead className="text-xs text-gray-700 uppercase bg-white">
           <tr>
             <th scope="col" className="px-6 py-3">
               Recipient / Sender
@@ -48,10 +50,10 @@ const TransactionsTable = ({ transactions, onSearchChange, formatDate, sortDir, 
         <tbody>
           {paginatedTransactions.map((tx) => (
             <tr key={tx.id} className="bg-white border-b border-gray-200">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{tx.name}</th>
+              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><TransactionAvatar name={tx.name} imageURI={tx.avatar}></TransactionAvatar></th>
               <td className="px-6 py-4">{tx.category}</td>
               <td className="px-6 py-4">{formatDate(tx.date)}</td>
-              <td className="px-6 py-4">{tx.amount}</td>
+              <td className="px-6 py-4"><TransactionAmount amount={tx.amount}></TransactionAmount></td>
             </tr>
           ))}
         </tbody>
