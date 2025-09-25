@@ -1,6 +1,7 @@
 import { useRootStore } from "../../../stores/rootStore";
 import { toCurrency } from "../../../utils/toCurrency";
 import PotsOverview from "../components/PotsOverview";
+import TransactionsOverview from "../components/TransactionsOverview";
 
 export default function HomePage() {
     const balance = useRootStore((state) => state.balance)
@@ -26,7 +27,16 @@ export default function HomePage() {
 
             {/* Put this in a grid */}
             <div className="grid grid-cols-2 gap-6 pt-10">
-                <PotsOverview />
+                {/* Left column */}
+                <div className="flex flex-col gap-6">
+                    <PotsOverview />
+                    <TransactionsOverview />
+                </div>
+
+                {/* Right column */}
+                <div className="flex flex-col gap-6">
+
+                </div>
             </div>
 
         </div>

@@ -40,8 +40,28 @@ const TransactionPage = () => {
       );
     }
 
+    if(sortDir) {
+      results = [...results].sort((a, b) => {
+        switch (sortDir) {
+          case "Latest":
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          case "Oldest":
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          case "A to Z":
+            return a.name.localeCompare(b.name);
+          case "Z to A":
+            return b.name.localeCompare(a.name);
+          case "Lowest":
+            return a.amount - b.amount;
+          case "Highest":
+            return b.amount - a.amount;
+          default:
+            return 0;
+        }
+    })}
+
     return results;
-  }, [transactions, searchTerm, categoryFilter]);
+  }, [transactions, searchTerm, categoryFilter, sortDir]);
 
   useEffect(() => {
     fetchTransactions();
