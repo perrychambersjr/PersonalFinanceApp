@@ -451,24 +451,28 @@
     {
       "category": "Entertainment",
       "maximum": 50,
+      "spent": 15,
       "theme": "#277C78",
       "id": "c7be"
     },
     {
       "category": "Bills",
       "maximum": 750,
+      "spent": 150,
       "theme": "#82C9D7",
       "id": "721c"
     },
     {
       "category": "Dining Out",
       "maximum": 75,
+      "spent": 133,
       "theme": "#F2CDAC",
       "id": "7210"
     },
     {
       "category": "Personal Care",
       "maximum": 100,
+      "spent": 40,
       "theme": "#626070",
       "id": "13ad"
     }

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { createBudgetsSlice } from '../features/budgets/store/budgetStore';
 import { createPotsSlice } from '../features/pots/store/potsStore';
 import { createTransactionsSlice } from '../features/transactions/store/transactionsStore';
 import { createBalanceSlice } from './balanceStore';
@@ -7,6 +8,7 @@ export const useRootStore = create((set, get) => ({
     ...createPotsSlice(set, get),
     ...createBalanceSlice(set, get),
     ...createTransactionsSlice(set, get),
+    ...createBudgetsSlice(set, get),
 
     hydrate: (data) => {
         if (data.pots) {
@@ -23,6 +25,13 @@ export const useRootStore = create((set, get) => ({
                 id: crypto.randomUUID()
             }));
             set({ transactions: transactionsWithIds });
+        }
+        if (data.budgets) {
+            const budgetsWithIds = data.budgets.map((budget, i) => ({
+                ...budget,
+                id: crypto.randomUUID()
+            }))
+            set({ budgets: budgetsWithIds })
         }
     }
 }))
